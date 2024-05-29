@@ -149,14 +149,20 @@ const ErrorMessage = styled.p<{ error?: boolean }>`
   font-size: 1.1rem;
   font-weight: 500;
   color: #ff7979;
-  margin-left: 30rem;
+  margin-left: auto;
   margin-top: -1rem;
   display: ${(props) => (props.error ? "block" : "none")};
+  max-width: 54rem;
 `;
 
 const Container = styled.div`
   display: flex;
   gap: 5rem;
+  margin: 2rem;
+
+  @media screen and (max-width: 900px) {
+    flex-direction: column;
+  }
 `;
 
 const InfoContainer = styled.div`
@@ -164,7 +170,11 @@ const InfoContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   gap: 3rem;
-  width: 52.5rem;
+  max-width: 52.5rem;
+
+  @media screen and (max-width: 900px) {
+    text-align: center;
+  }
 
   h1 {
     font-size: 5rem;
@@ -172,6 +182,15 @@ const InfoContainer = styled.div`
     line-height: 1.1;
     letter-spacing: -0.052rem;
     color: #fff;
+
+    @media screen and (max-width: 1050px) {
+      font-size: 4rem;
+    }
+
+    @media screen and (max-width: 400px) {
+      font-size: 3rem;
+      line-height: 1.3;
+    }
   }
 
   p {
@@ -189,7 +208,6 @@ const FormContainer = styled.div`
   gap: 2.4rem;
 
   .tryFreeBtn {
-    width: 54rem;
     height: 6rem;
     border-radius: 1rem;
     box-shadow: 0 8px 0 0 rgba(0, 0, 0, 0.15);
@@ -202,10 +220,30 @@ const FormContainer = styled.div`
       font-size: 1.5rem;
       font-weight: 300;
     }
+
+    @media screen and (max-width: 600px) {
+      height: 10rem;
+      font-size: 2.1rem;
+      padding: 0 7rem;
+
+      span {
+        font-size: 2.1rem;
+      }
+    }
+
+    @media screen and (max-width: 400px) {
+      font-size: 1.6rem;
+      padding: 0 4rem;
+
+      span {
+        font-size: 1.6rem;
+      }
+    }
   }
 `;
 
 const StyledForm = styled.form<{ error?: boolean }>`
+  min-width: 54rem;
   padding: 4rem;
   display: flex;
   flex-direction: column;
@@ -214,6 +252,15 @@ const StyledForm = styled.form<{ error?: boolean }>`
   border-radius: 1rem;
   box-shadow: 0 8px 0 0 rgba(0, 0, 0, 0.15);
   gap: ${(props) => (props.error ? "none" : "2rem")};
+
+  @media screen and (max-width: 600px) {
+    min-width: 0;
+    max-width: 54rem;
+    padding: 2rem;
+  }
+
+  @media screen and (max-width: 400px) {
+  }
 
   .claimBtn {
     width: 100%;
@@ -242,11 +289,15 @@ const StyledForm = styled.form<{ error?: boolean }>`
       line-height: 2.6rem;
       color: #ff7979;
     }
+
+    @media screen and (max-width: 400px) {
+      text-align: center;
+    }
   }
 `;
 
 const StyledInput = styled.input`
-  width: 46rem;
+  width: 100%;
   height: 5.6rem;
   border-radius: 0.5rem;
   border: solid 1px #5e54a4;
@@ -255,6 +306,10 @@ const StyledInput = styled.input`
   font-size: 1.4rem;
   font-weight: 600;
   color: #3d3b48;
+
+  @media screen and (max-width: 400px) {
+    opacity: 0.5;
+  }
 `;
 
 export default App;
