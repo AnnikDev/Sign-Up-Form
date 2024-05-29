@@ -1,8 +1,75 @@
-import { useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import "./App.css";
 import styled from "styled-components";
 
+type TInputs = {
+  firstname: string;
+  lastname: string;
+  emailaddress: string;
+  password: string;
+};
+
 function App() {
+  const [inputValues, setInputValues] = useState<TInputs>({
+    firstname: "",
+    lastname: "",
+    emailaddress: "",
+    password: "",
+  });
+
+  const [firstNameError, setFirstNameError] = useState(false);
+  const [lastNameError, setLastNameError] = useState(false);
+  const [emailAddressError, setEmailAddressError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    let globalError = false;
+
+    if (!inputValues.firstname) {
+      setFirstNameError(true);
+      globalError = true;
+    }
+
+    if (!inputValues.lastname) {
+      setLastNameError(true);
+      globalError = true;
+    }
+
+    if (!emailRegex.test(inputValues.emailaddress)) {
+      setEmailAddressError(true);
+      globalError = true;
+    }
+
+    if (!inputValues.password) {
+      setPasswordError(true);
+      globalError = true;
+    }
+
+    if (!globalError) {
+      setInputValues({
+        firstname: "",
+        lastname: "",
+        emailaddress: "",
+        password: "",
+      });
+    }
+  };
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    name == "firstname" && setFirstNameError(false);
+    name == "lastname" && setLastNameError(false);
+    name == "emailaddress" && setEmailAddressError(false);
+    name == "password" && setPasswordError(false);
+
+    setInputValues({
+      ...inputValues,
+      [name]: value,
+    });
+  };
   return (
     <>
       <Container>
@@ -18,12 +85,55 @@ function App() {
           <button className="tryFreeBtn">
             Try it free 7 days <span>then $20/mo. thereafter</span>
           </button>
-          <StyledForm>
-            <StyledInput name="First Name" placeholder="First Name" />
-            <StyledInput name="Last Name" placeholder="Last Name" />
-            <StyledInput name="Email Address" placeholder="Email Address" />
-            <StyledInput name="Password" placeholder="Password" />
-            <button className="claimBtn">CLAIM YOUR FREE TRIAL</button>
+          <StyledForm error={false} onSubmit={handleSubmit}>
+            <StyledInput
+              name="firstname"
+              placeholder="First Name"
+              value={inputValues.firstname}
+              onChange={handleChange}
+            />
+
+            <ErrorMessage error={firstNameError}>
+              First Name cannot be empty
+            </ErrorMessage>
+
+            <StyledInput
+              name="lastname"
+              placeholder="Last Name"
+              value={inputValues.lastname}
+              onChange={handleChange}
+            />
+
+            <ErrorMessage error={lastNameError}>
+              Last Name cannot be empty
+            </ErrorMessage>
+
+            <StyledInput
+              name="emailaddress"
+              placeholder="Email Address"
+              value={inputValues.emailaddress}
+              onChange={handleChange}
+            />
+
+            <ErrorMessage error={emailAddressError}>
+              Looks like this is not an email
+            </ErrorMessage>
+
+            <StyledInput
+              name="password"
+              type="password"
+              placeholder="Password"
+              value={inputValues.password}
+              onChange={handleChange}
+            />
+
+            <ErrorMessage error={passwordError}>
+              Password cannot be empty
+            </ErrorMessage>
+
+            <button type="submit" className="claimBtn">
+              CLAIM YOUR FREE TRIAL
+            </button>
             <p className="termsServices">
               By clicking the button, you are agreeing to our{" "}
               <span>Terms and Services</span>
@@ -34,6 +144,15 @@ function App() {
     </>
   );
 }
+
+const ErrorMessage = styled.p<{ error?: boolean }>`
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #ff7979;
+  margin-left: 30rem;
+  margin-top: -1rem;
+  display: ${(props) => (props.error ? "block" : "none")};
+`;
 
 const Container = styled.div`
   display: flex;
@@ -86,15 +205,15 @@ const FormContainer = styled.div`
   }
 `;
 
-const StyledForm = styled.form`
+const StyledForm = styled.form<{ error?: boolean }>`
   padding: 4rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
   background-color: #fff;
   border-radius: 1rem;
   box-shadow: 0 8px 0 0 rgba(0, 0, 0, 0.15);
+  gap: ${(props) => (props.error ? "none" : "2rem")};
 
   .claimBtn {
     width: 100%;
@@ -105,6 +224,11 @@ const StyledForm = styled.form`
     font-size: 1.5rem;
     font-weight: 600;
     color: #fff;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #77e2b3;
+    }
   }
 
   .termsServices {
@@ -127,7 +251,7 @@ const StyledInput = styled.input`
   border-radius: 0.5rem;
   border: solid 1px #5e54a4;
   background-color: #fff;
-  padding: 1.5rem 35rem 1.5rem 3.2rem;
+  padding: 1.5rem 3.5rem;
   font-size: 1.4rem;
   font-weight: 600;
   color: #3d3b48;
