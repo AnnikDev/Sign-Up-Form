@@ -1,5 +1,4 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import "./App.css";
 import styled from "styled-components";
 
 type TInputs = {
@@ -257,9 +256,6 @@ const StyledForm = styled.form<{ error?: boolean }>`
     min-width: 0;
     max-width: 54rem;
     padding: 2rem;
-  }
-
-  @media screen and (max-width: 400px) {
   }
 
   .claimBtn {
